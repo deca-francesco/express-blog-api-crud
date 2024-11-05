@@ -1,6 +1,7 @@
 const posts = require("../db/posts-db.js");
 const fs = require("fs");
 
+/*
 const index = (req, res) => {
     // creo variabili per salvare il contenuto del listItem e tutti i listItems
     let listItem = "";
@@ -28,6 +29,15 @@ const index = (req, res) => {
 
     res.send(markup);
 }
+*/
+
+const index = (req, res) => {
+    res.json({
+        data: posts,
+        counter: posts.length
+    })
+}
+
 
 
 const show = (req, res) => {
@@ -50,7 +60,7 @@ const show = (req, res) => {
 
 
 const tagFilter = (req, res) => {
-    const postsFiltered = posts.filter(post => post.tags.toLowerCase().includes(req.query));
+    const postsFiltered = posts.filter(post => post.tags.toLowerCase().includes(req.query.tag));
     if (!postsFiltered) {
         return res.status(404).json({
             error: `404! Not found`
