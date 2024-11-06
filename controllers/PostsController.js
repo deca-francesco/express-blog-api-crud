@@ -101,12 +101,41 @@ const store = (req, res) => {
 }
 
 
+const update = (req, res) => {
+    // prendo il post tramite slug
+    const post = posts.find(post => post.slug === req.params.slug);
 
+    // controllo se esiste, se non esiste interrompo
+    if (!post) {
+        return res.status(404).json({
+            error: `404! Not found`
+        })
+    }
+
+    // assegno i nuovi valori delle proprietà
+    post.title = req.body.title;
+    post.slug = req.body.slug;
+    post.content = req.body.content;
+    post.image = req.body.image;
+    post.tags = req.body.tags;
+
+    // salvo nel file
+    fs.writeFileSync("./db/posts-db.js", 
+        `module.exports = ${JSON.stringify(posts, null, 4)}`);
+
+    // ritorno l'oggetto aggiornato
+    res.status(201).json({
+        status: 201,
+        data: posts,
+        counter: posts.length
+    });
+}
 
 
 module.exports = {
     index,
     show,
     tagFilter,
-    store
+    store,
+    update
 }

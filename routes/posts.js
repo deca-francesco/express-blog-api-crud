@@ -18,6 +18,8 @@ router.get("/?tag", PostsController.tagFilter);
 // rotta store
 router.post("/", PostsController.store);
 
+// rotta update
+router.put("/:slug", PostsController.update);
 
 
 module.exports = router;
