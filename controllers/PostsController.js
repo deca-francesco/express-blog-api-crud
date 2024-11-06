@@ -123,11 +123,10 @@ const update = (req, res) => {
     fs.writeFileSync("./db/posts-db.js", 
         `module.exports = ${JSON.stringify(posts, null, 4)}`);
 
-    // ritorno l'oggetto aggiornato
+    // ritorno solo l'oggetto aggiornato
     res.status(201).json({
         status: 201,
-        data: posts,
-        counter: posts.length
+        data: post,
     });
 }
 
