@@ -21,5 +21,7 @@ router.post("/", PostsController.store);
 // rotta update
 router.put("/:slug", PostsController.update);
 
+// rotta detroy
+router.delete("/:slug", PostsController.destroy);
 
 module.exports = router;

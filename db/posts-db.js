@@ -80,17 +80,5 @@ module.exports = [
             "Ricette vegetariane",
             "Ricette al forno"
         ]
-    },
-    {
-        "title": "Ciambellone",
-        "slug": "ciambellone3",
-        "content": "ciambellone",
-        "image": "/imgs/posts/ciambellone.jpeg",
-        "tags": [
-            "Dolci",
-            "Torte",
-            "Ricette vegetariane",
-            "Ricette al forno"
-        ]
     }
 ]
