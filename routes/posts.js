@@ -13,13 +13,16 @@ router.get("/", PostsController.index);
 router.get("/:slug", PostsController.show);
 
 // rotta tagFilter
-router.get("/?tag", PostsController.tagFilter);
+router.get("/filter", PostsController.tagFilter);
 
 // rotta store
 router.post("/", PostsController.store);
 
 // rotta update
 router.put("/:slug", PostsController.update);
+
+// rotta modifica (singolo valore)
+router.patch("/:slug", PostsController.modify);
 
 // rotta detroy
 router.delete("/:slug", PostsController.destroy);

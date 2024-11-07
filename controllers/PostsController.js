@@ -1,3 +1,4 @@
+const { query } = require("express");
 const posts = require("../db/posts-db.js");
 const fs = require("fs");
 
@@ -39,7 +40,6 @@ const index = (req, res) => {
 }
 
 
-
 const show = (req, res) => {
     // prendo il post con slug === al parametro nella query string con find
     const post = posts.find(post => post.slug === req.params.slug);
@@ -58,16 +58,23 @@ const show = (req, res) => {
 }
 
 
-
 const tagFilter = (req, res) => {
+
+    console.log(req.query);
+    console.log("CIao");
+    
+    
     const postsFiltered = posts.filter(post => post.tags.toLowerCase().includes(req.query.tag));
+
     if (!postsFiltered) {
         return res.status(404).json({
             error: `404! Not found`
         })
     }
-    return res.status(200).json({
-        data: postsFiltered
+    
+    res.status(200).json({
+        data: postsFiltered,
+        counter: postsFiltered.length
     })
 }
 
@@ -121,12 +128,41 @@ const update = (req, res) => {
 
     // salvo nel file
     fs.writeFileSync("./db/posts-db.js", 
-        `module.exports = ${JSON.stringify(posts, null, 4)}`);
+        `module.exports = ${JSON.stringify(posts, null, 2)}`);
 
     // ritorno solo l'oggetto aggiornato
     res.status(201).json({
         status: 201,
         data: post,
+    });
+}
+
+
+const modify = (req, res) => {
+    // prendo il post tramite slug
+    const post = posts.find(post => post.slug  === req.params.slug);
+
+    // controllo se esiste, se non esiste interrompo
+    if (!post) {
+        return res.status(404).json({
+            error: `404! Not found`
+        })
+    }
+
+    // assegno il nuovo valore della proprietà, lasciando invariati quelli non compresi nel body della richiesta
+    const modifiedPost = { ...post, ...req.body};
+
+    // salvo nell'array posts l'oggetto modificato sovrascrivendo il vecchio oggetto con lo stesso indice
+    posts[posts.indexOf(post)] = modifiedPost;
+
+    // salvo nel file
+    fs.writeFileSync("./db/posts-db.js", 
+        `module.exports = ${JSON.stringify(posts, null, 2)}`);
+
+    // ritorno solo l'oggetto modificato
+    res.status(201).json({
+        status: 201,
+        data: modifiedPost,
     });
 }
 
@@ -164,5 +200,6 @@ module.exports = {
     tagFilter,
     store,
     update,
+    modify,
     destroy
 }
