@@ -1,8 +1,7 @@
-const { query } = require("express");
 const posts = require("../db/posts-db.js");
 const fs = require("fs");
 
-/*
+
 const index = (req, res) => {
     // creo variabili per salvare il contenuto del listItem e tutti i listItems
     let listItem = "";
@@ -10,9 +9,9 @@ const index = (req, res) => {
 
     // ciclo per riempire il contenuto del listItem e aggiornare la lista dei listItems
     posts.forEach(post => {
-        
-        listItem = 
-        `<li>
+
+        listItem =
+            `<li>
             <h2>${post.title}</h2>
             <p>${post.content}</p>
             <img src="${post.image}">
@@ -30,21 +29,21 @@ const index = (req, res) => {
 
     res.send(markup);
 }
-*/
 
-const index = (req, res) => {
-    res.json({
-        data: posts,
-        counter: posts.length
-    })
-}
+
+// const index = (req, res) => {
+//     res.json({
+//         data: posts,
+//         counter: posts.length
+//     })
+// }
 
 
 const show = (req, res) => {
     // prendo il post con slug === al parametro nella query string con find
     const post = posts.find(post => post.slug === req.params.slug);
     // console.log(post);
-    
+
     // blocco lo script sia se trovo il post sia se non lo trovo
     if (!post) {
         return res.status(404).json({
@@ -58,29 +57,11 @@ const show = (req, res) => {
 }
 
 
-const tagFilter = (req, res) => {
 
-    console.log(req.query);
-    console.log("CIao");
-    
-    
-    const postsFiltered = posts.filter(post => post.tags.toLowerCase().includes(req.query.tag));
-
-    if (!postsFiltered) {
-        return res.status(404).json({
-            error: `404! Not found`
-        })
-    }
-    
-    res.status(200).json({
-        data: postsFiltered,
-        counter: postsFiltered.length
-    })
-}
 
 
 const store = (req, res) => {
-    
+
     console.log(req.body);
 
     // creo il post con i dati del body della richiesta
@@ -94,12 +75,12 @@ const store = (req, res) => {
 
     // lo inserisco nell'array
     posts.push(post);
-    
+
     // per salvarlo nel file importiamo e usiamo fs
     // usiamo il metodo stringify dell'oggetto JSON per convertire posts nella json notation (virgolette)
-    fs.writeFileSync("./db/posts-db.js", 
+    fs.writeFileSync("./db/posts-db.js",
         `module.exports = ${JSON.stringify(posts, null, 2)}`);
-    
+
     res.status(201).json({
         status: 201,
         data: posts,
@@ -127,7 +108,7 @@ const update = (req, res) => {
     post.tags = req.body.tags;
 
     // salvo nel file
-    fs.writeFileSync("./db/posts-db.js", 
+    fs.writeFileSync("./db/posts-db.js",
         `module.exports = ${JSON.stringify(posts, null, 2)}`);
 
     // ritorno solo l'oggetto aggiornato
@@ -140,7 +121,7 @@ const update = (req, res) => {
 
 const modify = (req, res) => {
     // prendo il post tramite slug
-    const post = posts.find(post => post.slug  === req.params.slug);
+    const post = posts.find(post => post.slug === req.params.slug);
 
     // controllo se esiste, se non esiste interrompo
     if (!post) {
@@ -150,13 +131,13 @@ const modify = (req, res) => {
     }
 
     // assegno il nuovo valore della proprietà, lasciando invariati quelli non compresi nel body della richiesta
-    const modifiedPost = { ...post, ...req.body};
+    const modifiedPost = { ...post, ...req.body };
 
     // salvo nell'array posts l'oggetto modificato sovrascrivendo il vecchio oggetto con lo stesso indice
     posts[posts.indexOf(post)] = modifiedPost;
 
     // salvo nel file
-    fs.writeFileSync("./db/posts-db.js", 
+    fs.writeFileSync("./db/posts-db.js",
         `module.exports = ${JSON.stringify(posts, null, 2)}`);
 
     // ritorno solo l'oggetto modificato
@@ -197,7 +178,6 @@ const destroy = (req, res) => {
 module.exports = {
     index,
     show,
-    tagFilter,
     store,
     update,
     modify,

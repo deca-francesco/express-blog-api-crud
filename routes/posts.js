@@ -12,8 +12,6 @@ router.get("/", PostsController.index);
 // rotta show
 router.get("/:slug", PostsController.show);
 
-// rotta tagFilter
-router.get("/filter", PostsController.tagFilter);
 
 // rotta store
 router.post("/", PostsController.store);

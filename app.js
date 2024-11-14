@@ -7,6 +7,7 @@ const PORT = 3000;
 // importo le routes
 const PostsRoutes = require("./routes/posts.js");
 
+const FilterRoute = require("./routes/filter.js");
 
 // parser per elaborare il body della richiesta. Di default non fa niente. Va messo prima dell'uso delle rotte
 app.use(express.json());
@@ -36,7 +37,7 @@ app.use("/posts", loggerMiddleware);
 
 
 // il trigger dell'errore 500 va prima delle rotte. Va commentato dopo che l'abbiamo testato
-app.use("/posts", error500TriggerMiddleware);
+// app.use("/posts", error500TriggerMiddleware);
 
 
 
@@ -44,11 +45,21 @@ app.use("/posts", error500TriggerMiddleware);
 app.use("/posts", PostsRoutes);
 
 
+// filter route
+app.use("/filter", FilterRoute)
+
+
+
+
+
+
+
+
 
 // error 404 handler middleware. Va inserita dopo le rotte perché deve controllarle
- app.use(error404HandlerMiddleware);
+app.use(error404HandlerMiddleware);
 
 
 // middleware gestione errore 500. va messa alla fine
 app.use(errorHandlerMiddleware);
- 
+
