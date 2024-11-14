@@ -16,15 +16,15 @@ const tagFilter = (req, res) => {
     });
 
 
-    if (!postsFiltered) {
+    if (postsFiltered.length === 0) {
         return res.status(404).json({
-            error: `404! Not found`
+            error: `404! Nessun Risultato trovato`
         })
     }
 
     res.status(200).json({
-        data: postsFiltered,
-        counter: postsFiltered.length
+        counter: postsFiltered.length,
+        data: postsFiltered
     })
 }
 
