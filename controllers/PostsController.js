@@ -2,41 +2,72 @@ const posts = require("../db/posts-db.js");
 const fs = require("fs");
 
 
+// const index = (req, res) => {
+//     // creo variabili per salvare il contenuto del listItem e tutti i listItems
+//     let listItem = "";
+//     let listItems = "";
+
+//     // ciclo per riempire il contenuto del listItem e aggiornare la lista dei listItems
+//     posts.forEach(post => {
+
+//         listItem =
+//             `<li>
+//             <h2>${post.title}</h2>
+//             <p>${post.content}</p>
+//             <img src="${post.image}">
+//             <p>${post.tags}</p>
+//         </li>`
+
+//         listItems += listItem;
+//     })
+
+//     // assegno al markup tutti i listItems
+//     const markup = `
+//     <ol>
+//         ${listItems}
+//     </ol>`;
+
+//     res.send(markup);
+// }
+
+
 const index = (req, res) => {
-    // creo variabili per salvare il contenuto del listItem e tutti i listItems
-    let listItem = "";
-    let listItems = "";
-
-    // ciclo per riempire il contenuto del listItem e aggiornare la lista dei listItems
-    posts.forEach(post => {
-
-        listItem =
-            `<li>
-            <h2>${post.title}</h2>
-            <p>${post.content}</p>
-            <img src="${post.image}">
-            <p>${post.tags}</p>
-        </li>`
-
-        listItems += listItem;
+    res.json({
+        counter: posts.length,
+        data: posts
     })
-
-    // assegno al markup tutti i listItems
-    const markup = `
-    <ol>
-        ${listItems}
-    </ol>`;
-
-    res.send(markup);
 }
 
 
-// const index = (req, res) => {
-//     res.json({
-//         data: posts,
-//         counter: posts.length
-//     })
-// }
+
+const tagFilter = (req, res) => {
+
+    console.log(req.query.tag);
+
+
+    // il metodo some ritorna true se trova un elemento che soddisfa la condizione
+    // con filter ritorniamo solo i post che hanno la condizione in some = true
+    const postsFiltered = posts.filter(post => {
+        return post.tags.some(tag => tag.toLowerCase() === req.query.tag.toLowerCase());
+    });
+
+
+    if (postsFiltered.length === 0) {
+        return res.status(404).json({
+            error: `404! Nessun Risultato trovato`
+        })
+    }
+
+    res.status(200).json({
+        counter: postsFiltered.length,
+        data: postsFiltered
+    })
+}
+
+
+
+
+
 
 
 const show = (req, res) => {
@@ -55,8 +86,6 @@ const show = (req, res) => {
     })
 
 }
-
-
 
 
 
@@ -177,6 +206,7 @@ const destroy = (req, res) => {
 
 module.exports = {
     index,
+    tagFilter,
     show,
     store,
     update,

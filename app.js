@@ -2,7 +2,17 @@ const express = require("express");
 const app = express();
 
 const HOST = "http://localhost";
-const PORT = 3000;
+const PORT = 3001;
+
+
+const cors = require('cors');
+
+app.use(cors())
+
+
+
+
+
 
 // importo le routes
 const PostsRoutes = require("./routes/posts.js");
