@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 
 const HOST = "http://localhost";
-const PORT = 3001;
+const PORT = 8000;
 
 
 const cors = require('cors');
