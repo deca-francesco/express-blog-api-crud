@@ -93,28 +93,40 @@ const store = (req, res) => {
 
     console.log(req.body);
 
-    // creo il post con i dati del body della richiesta
-    const post = {
-        title: req.body.title,
-        slug: req.body.slug,
-        content: req.body.content,
-        image: req.body.image,
-        tags: req.body.tags
+    const postsExists = posts.find(post => post.slug === req.body.slug);
+
+
+    if (!postsExists) {
+        // creo il post con i dati del body della richiesta
+        const post = {
+            title: req.body.title,
+            slug: req.body.slug,
+            content: req.body.content,
+            image: req.body.image,
+            tags: req.body.tags
+        }
+
+        // lo inserisco nell'array
+        posts.push(post);
+
+        // per salvarlo nel file importiamo e usiamo fs
+        // usiamo il metodo stringify dell'oggetto JSON per convertire posts nella json notation (virgolette)
+        fs.writeFileSync("./db/posts-db.js",
+            `module.exports = ${JSON.stringify(posts, null, 2)}`);
+
+        res.status(201).json({
+            status: 201,
+            data: posts,
+            counter: posts.length
+        })
+    } else {
+        res.status(201).json({
+            status: 201,
+            data: posts,
+            counter: posts.length
+        })
+
     }
-
-    // lo inserisco nell'array
-    posts.push(post);
-
-    // per salvarlo nel file importiamo e usiamo fs
-    // usiamo il metodo stringify dell'oggetto JSON per convertire posts nella json notation (virgolette)
-    fs.writeFileSync("./db/posts-db.js",
-        `module.exports = ${JSON.stringify(posts, null, 2)}`);
-
-    res.status(201).json({
-        status: 201,
-        data: posts,
-        counter: posts.length
-    })
 }
 
 

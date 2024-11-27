@@ -9,17 +9,21 @@ const PostsController = require("../controllers/PostsController.js");
 // rotta index
 router.get("/", PostsController.index, PostsController.tagFilter);
 
-// rotta show
-router.get("/:slug", PostsController.show);
 
 // rotta store
 router.post("/", PostsController.store);
+
+
+// rotta show
+router.get("/:slug", PostsController.show);
+
+
 
 // rotta update
 router.put("/:slug", PostsController.update);
 
 // rotta modifica (singolo valore)
-router.patch("/:slug", PostsController.modify);
+// router.patch("/:slug", PostsController.modify);
 
 // rotta detroy
 router.delete("/:slug", PostsController.destroy);
